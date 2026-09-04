@@ -5,17 +5,16 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Trang chủ - Cửa Hàng Trực Tuyến</title>
+    <title>Danh sách Sản phẩm - E-Shop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
         body { background: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .hero-banner { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border-radius: 16px; padding: 40px; }
         .product-card { border: none; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s; height: 100%; }
         .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
-        .product-img-wrapper { height: 220px; overflow: hidden; border-radius: 12px 12px 0 0; background: #eef2f7; display: flex; align-items: center; justify-content: center; }
+        .product-img-wrapper { height: 230px; overflow: hidden; border-radius: 12px 12px 0 0; background: #eef2f7; display: flex; align-items: center; justify-content: center; }
         .product-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        .price-tag { color: #dc2626; font-weight: 700; font-size: 1.15rem; }
+        .price-tag { color: #dc2626; font-weight: 700; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -30,8 +29,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/product">Tất cả sản phẩm</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/product">Tất cả sản phẩm</a></li>
                 <c:if test="${sessionScope.account != null && sessionScope.account.roleid == 1}">
                     <li class="nav-item"><a class="nav-link text-warning fw-semibold" href="${pageContext.request.contextPath}/admin/products">Trang Admin</a></li>
                 </c:if>
@@ -52,35 +51,19 @@
     </div>
 </nav>
 
-<!-- Main Container -->
 <div class="container my-4">
-    <!-- Hero Banner -->
-    <div class="hero-banner mb-5 text-center text-md-start d-flex justify-content-between align-items-center flex-wrap">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
         <div>
-            <h1 class="fw-extrabold display-5 mb-2">Chào mừng đến với E-Shop</h1>
-            <p class="lead opacity-90 mb-4">Khám phá các sản phẩm công nghệ mới nhất với mức giá hấp dẫn nhất!</p>
-            <a href="${pageContext.request.contextPath}/product" class="btn btn-light btn-lg fw-bold text-primary px-4 shadow-sm">
-                Xem tất cả sản phẩm <i class="bi bi-arrow-right ms-1"></i>
-            </a>
+            <h2 class="fw-bold mb-1">Tất cả Sản phẩm</h2>
+            <p class="text-muted mb-0">Hiển thị 6 sản phẩm mỗi trang (Tổng số ${totalProducts} sản phẩm)</p>
         </div>
-        <div class="d-none d-md-block fs-1 opacity-50 px-4">
-            <i class="bi bi-bag-heart-fill display-1"></i>
-        </div>
+        <span class="badge bg-primary fs-6 px-3 py-2">Trang ${currentPage} / ${totalPages}</span>
     </div>
 
-    <!-- Section 10 Sản phẩm mới nhất -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="fw-bold mb-0">10 Sản phẩm mới nhất</h3>
-            <p class="text-muted small">Cập nhật những mặt hàng mới về cửa hàng</p>
-        </div>
-        <a href="${pageContext.request.contextPath}/product" class="text-primary text-decoration-none fw-semibold">
-            Xem thêm (${totalProducts != null ? totalProducts : 'Tất cả'}) <i class="bi bg-chevron-right"></i>
-        </a>
-    </div>
-
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 mb-5">
-        <c:forEach items="${top10Products}" var="p">
+    <!-- Product Grid (6 products per page) -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
+        <c:forEach items="${products}" var="p">
             <div class="col">
                 <div class="card product-card shadow-sm">
                     <a href="${pageContext.request.contextPath}/product/detail?id=${p.productId}">
@@ -95,30 +78,56 @@
                             </c:choose>
                         </div>
                     </a>
-                    <div class="card-body d-flex flex-column">
-                        <span class="badge bg-secondary mb-2 w-auto me-auto">${p.category != null ? p.category.categoryname : 'Chung'}</span>
-                        <h6 class="card-title text-truncate mb-2">
+                    <div class="card-body d-flex flex-column p-4">
+                        <span class="badge bg-info text-dark mb-2 w-auto me-auto">${p.category != null ? p.category.categoryname : 'Danh mục'}</span>
+                        <h5 class="card-title text-truncate mb-2">
                             <a href="${pageContext.request.contextPath}/product/detail?id=${p.productId}" class="text-dark text-decoration-none fw-bold" title="${p.productName}">
                                 ${p.productName}
                             </a>
-                        </h6>
+                        </h5>
+                        <p class="text-muted small text-truncate mb-3">${p.description}</p>
                         <div class="mt-auto d-flex justify-content-between align-items-center">
                             <span class="price-tag"><fmt:formatNumber value="${p.price}" pattern="#,##0"/> đ</span>
-                            <a href="${pageContext.request.contextPath}/product/detail?id=${p.productId}" class="btn btn-sm btn-outline-primary rounded-circle" title="Xem chi tiết">
-                                <i class="bi bi-eye"></i>
+                            <a href="${pageContext.request.contextPath}/product/detail?id=${p.productId}" class="btn btn-primary px-3">
+                                Chi tiết <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </c:forEach>
-        <c:if test="${empty top10Products}">
+
+        <c:if test="${empty products}">
             <div class="col-12 text-center py-5 text-muted">
-                <i class="bi bi-inbox display-4 d-block mb-2"></i>
-                Chưa có sản phẩm nào. Vui lòng vào trang Admin để tạo mới.
+                <i class="bi bi-bag-x display-3 d-block mb-3"></i>
+                Không tìm thấy sản phẩm nào trên trang này.
             </div>
         </c:if>
     </div>
+
+    <!-- Pagination Controls (Phân trang 6sp/trang) -->
+    <c:if test="${totalPages > 1}">
+        <nav aria-label="Page navigation" class="mb-5">
+            <ul class="pagination justify-content-center">
+                <!-- Previous Button -->
+                <li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="${pageContext.request.contextPath}/product?page=${currentPage - 1}">Trắc trước</a>
+                </li>
+
+                <!-- Page Numbers -->
+                <c:forEach begin="1" end="${totalPages}" var="i">
+                    <li class="page-item ${currentPage == i ? 'active' : ''}">
+                        <a class="page-link" href="${pageContext.request.contextPath}/product?page=${i}">${i}</a>
+                    </li>
+                </c:forEach>
+
+                <!-- Next Button -->
+                <li class="page-item ${currentPage >= totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="${pageContext.request.contextPath}/product?page=${currentPage + 1}">Trang tiếp</a>
+                </li>
+            </ul>
+        </nav>
+    </c:if>
 </div>
 
 <footer class="bg-white border-top py-4 mt-auto">

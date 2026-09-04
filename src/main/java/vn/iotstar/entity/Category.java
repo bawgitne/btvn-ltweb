@@ -35,6 +35,10 @@ public class Category implements Serializable {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Video> videos = new ArrayList<>();
 
+    // bi-directional many-to-one association to Product
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
+
     public int getCategoryid() {
         return categoryid;
     }
@@ -75,6 +79,14 @@ public class Category implements Serializable {
         this.videos = videos;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     public Video addVideo(Video video) {
         if (getVideos() == null) {
             setVideos(new ArrayList<>());
@@ -90,5 +102,22 @@ public class Category implements Serializable {
         }
         video.setCategory(null);
         return video;
+    }
+
+    public Product addProduct(Product product) {
+        if (getProducts() == null) {
+            setProducts(new ArrayList<>());
+        }
+        getProducts().add(product);
+        product.setCategory(this);
+        return product;
+    }
+
+    public Product removeProduct(Product product) {
+        if (getProducts() != null) {
+            getProducts().remove(product);
+        }
+        product.setCategory(null);
+        return product;
     }
 }

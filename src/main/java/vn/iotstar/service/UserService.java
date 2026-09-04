@@ -5,9 +5,13 @@ import vn.iotstar.model.User;
 public interface UserService {
     User login(String username, String password);
     User get(String username);
+    User getByEmail(String email);
     void insert(User user);
     boolean register(String username, String password, String email, String fullname, String phone);
     boolean checkExistEmail(String email);
     boolean checkExistUsername(String username);
     boolean checkExistPhone(String phone);
+    boolean verifyOtp(String email, String code);
+    boolean sendForgotPasswordOtp(String email);
+    boolean resetPasswordWithOtp(String email, String code, String newPassword);
 }

@@ -15,11 +15,13 @@ public class User implements Serializable {
     private int roleid;
     private String phone;
     private Date createdDate;
+    private int status; // 0: inactive, 1: active
+    private String code; // OTP code
 
     public User() {}
 
     public User(String email, String userName, String fullName, String passWord,
-                String avatar, int roleid, String phone, Date createdDate) {
+                String avatar, int roleid, String phone, Date createdDate, int status, String code) {
         this.email = email;
         this.userName = userName;
         this.fullName = fullName;
@@ -28,11 +30,13 @@ public class User implements Serializable {
         this.roleid = roleid;
         this.phone = phone;
         this.createdDate = createdDate;
+        this.status = status;
+        this.code = code;
     }
 
     public User(int id, String email, String userName, String fullName, String passWord,
-                String avatar, int roleid, String phone, Date createdDate) {
-        this(email, userName, fullName, passWord, avatar, roleid, phone, createdDate);
+                String avatar, int roleid, String phone, Date createdDate, int status, String code) {
+        this(email, userName, fullName, passWord, avatar, roleid, phone, createdDate, status, code);
         this.id = id;
     }
 
@@ -54,4 +58,8 @@ public class User implements Serializable {
     public void setPhone(String phone) { this.phone = phone; }
     public Date getCreatedDate() { return createdDate; }
     public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
+    public int getStatus() { return status; }
+    public void setStatus(int status) { this.status = status; }
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
 }

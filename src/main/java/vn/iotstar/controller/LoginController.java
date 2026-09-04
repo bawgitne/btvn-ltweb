@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
@@ -24,10 +26,18 @@ public class LoginController extends HttpServlet {
             return;
         }
 
+        if ("1".equals(req.getParameter("activated"))) {
+            req.setAttribute("msg", "Tài khoản của bạn đã được kích hoạt thành công! Hãy đăng nhập.");
+        } else if ("1".equals(req.getParameter("registered"))) {
+            req.setAttribute("msg", "Đăng ký thành công! Vui lòng kiểm tra email để nhận mã OTP kích hoạt.");
+        } else if ("1".equals(req.getParameter("resetSuccess"))) {
+            req.setAttribute("msg", "Đặt lại mật khẩu thành công! Hãy đăng nhập với mật khẩu mới.");
+        }
+
         String rememberedUsername = getRememberedUsername(req);
         if (rememberedUsername != null) {
             User user = service.get(rememberedUsername);
-            if (user != null) {
+            if (user != null && user.getStatus() == 1) {
                 session = req.getSession(true);
                 session.setAttribute(Constant.SESSION_ACCOUNT, user);
                 session.setAttribute(Constant.SESSION_USERNAME, user.getUserName());
@@ -57,6 +67,13 @@ public class LoginController extends HttpServlet {
 
         User user = service.login(username, password);
         if (user != null) {
+            if (user.getStatus() == 0) {
+                String verifyUrl = req.getContextPath() + "/verify-otp?email=" + URLEncoder.encode(user.getEmail(), StandardCharsets.UTF_8);
+                req.setAttribute("alert", "Tài khoản chưa được kích hoạt! <a href='" + verifyUrl + "'>Kích hoạt ngay tại đây</a>.");
+                req.getRequestDispatcher(Constant.Path.LOGIN).forward(req, resp);
+                return;
+            }
+
             HttpSession session = req.getSession(true);
             session.setAttribute(Constant.SESSION_ACCOUNT, user);
             session.setAttribute(Constant.SESSION_USERNAME, user.getUserName());
