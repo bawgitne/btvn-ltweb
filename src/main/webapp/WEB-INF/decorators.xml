@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/decorators">
+    <excludes>
+        <pattern>/assets/*</pattern>
+        <pattern>/image*</pattern>
+        <pattern>*.js</pattern>
+        <pattern>*.css</pattern>
+        <pattern>*.png</pattern>
+        <pattern>*.jpg</pattern>
+    </excludes>
+
+    <decorator name="user" page="user.jsp">
+        <pattern>/user/*</pattern>
+        <pattern>/profile*</pattern>
+        <pattern>/myprofile*</pattern>
+    </decorator>
+</decorators>

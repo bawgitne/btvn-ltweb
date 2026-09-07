@@ -127,6 +127,13 @@
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- SiteMesh Layout Decorator -->
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>2.4.2</version>
+        </dependency>
     </dependencies>
 
     <build>

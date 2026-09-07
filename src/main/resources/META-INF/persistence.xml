@@ -6,6 +6,7 @@
         <class>vn.iotstar.entity.Category</class>
         <class>vn.iotstar.entity.Video</class>
         <class>vn.iotstar.entity.Product</class>
+        <class>vn.iotstar.entity.User</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/ServletCRUDMVC?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=UTF-8" />

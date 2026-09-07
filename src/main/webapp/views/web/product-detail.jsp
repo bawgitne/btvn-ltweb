@@ -29,6 +29,9 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
                 <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/product">Tất cả sản phẩm</a></li>
+                <c:if test="${sessionScope.account != null}">
+                    <li class="nav-item"><a class="nav-link text-info fw-semibold" href="${pageContext.request.contextPath}/user/profile"><i class="bi bi-person-badge me-1"></i>Hồ sơ cá nhân</a></li>
+                </c:if>
                 <c:if test="${sessionScope.account != null && sessionScope.account.roleid == 1}">
                     <li class="nav-item"><a class="nav-link text-warning fw-semibold" href="${pageContext.request.contextPath}/admin/products">Trang Admin</a></li>
                 </c:if>
@@ -40,8 +43,22 @@
                         <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Đăng ký</a>
                     </c:when>
                     <c:otherwise>
-                        <span class="text-light me-3"><i class="bi bi-person-circle me-1"></i>${sessionScope.account.fullName}</span>
-                        <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger btn-sm">Đăng xuất</a>
+                        <a href="${pageContext.request.contextPath}/user/profile" class="btn btn-outline-light me-2 d-inline-flex align-items-center gap-2 rounded-pill px-3" title="Xem & Cập nhật Profile">
+                            <c:choose>
+                                <c:when test="${not empty sessionScope.account.avatar && !sessionScope.account.avatar.startsWith('http')}">
+                                    <img src="${pageContext.request.contextPath}/image?fname=${sessionScope.account.avatar}" alt="Avatar" style="width: 28px; height: 28px; object-fit: cover; border-radius: 50%;">
+                                </c:when>
+                                <c:when test="${not empty sessionScope.account.avatar && sessionScope.account.avatar.startsWith('http')}">
+                                    <img src="${sessionScope.account.avatar}" alt="Avatar" style="width: 28px; height: 28px; object-fit: cover; border-radius: 50%;">
+                                </c:when>
+                                <c:otherwise>
+                                    <i class="bi bi-person-circle fs-6"></i>
+                                </c:otherwise>
+                            </c:choose>
+                            <span>${sessionScope.account.fullName}</span>
+                            <span class="badge bg-primary ms-1">Profile</span>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger btn-sm rounded-pill px-3">Đăng xuất</a>
                     </c:otherwise>
                 </c:choose>
             </div>

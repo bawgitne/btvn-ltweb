@@ -2,7 +2,7 @@ package vn.iotstar.service.impl;
 
 import vn.iotstar.dao.UserDao;
 import vn.iotstar.dao.impl.UserDaoImpl;
-import vn.iotstar.model.User;
+import vn.iotstar.entity.User;
 import vn.iotstar.service.UserService;
 import vn.iotstar.util.EmailUtil;
 
@@ -10,6 +10,11 @@ import java.util.Random;
 
 public class UserServiceImpl implements UserService {
     private final UserDao userDao = new UserDaoImpl();
+
+    @Override
+    public User findById(int id) {
+        return userDao.findById(id);
+    }
 
     @Override
     public User login(String username, String password) {
@@ -37,6 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void insert(User user) {
         userDao.insert(user);
+    }
+
+    @Override
+    public void update(User user) {
+        userDao.update(user);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package vn.iotstar.filter;
 
-import vn.iotstar.model.User;
+import vn.iotstar.entity.User;
 import vn.iotstar.util.Constant;
 
 import javax.servlet.*;
